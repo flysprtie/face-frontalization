@@ -20,10 +20,11 @@ class ThreeD_Model:
 
 
 
-def frontalize(img, proj_matrix, ref_U, eyemask):
+def frontalize(img, proj_matrix, ref_U, eyemask, verbose=False):
     ACC_CONST = 800
     img = img.astype('float32')
-    print "query image shape:", img.shape
+    if verbose:
+        print "query image shape:", img.shape
 
     bgind = np.sum(np.abs(ref_U), 2) == 0
     # count the number of times each pixel in the query is accessed
@@ -40,8 +41,7 @@ def frontalize(img, proj_matrix, ref_U, eyemask):
     temp_proj2 = temp_proj2[:, nonbadind]
     # because python arrays are zero indexed
     temp_proj2 -= 1
-    ind = np.ravel_multi_index((np.asarray(temp_proj2[1, :].round(), dtype='int64'), np.asarray(temp_proj2[0, :].round(),
-                                dtype='int64')), dims=img.shape[:-1], order='F')
+    ind = np.ravel_multi_index((np.asarray(temp_proj2[1, :].round(), dtype='int64'), np.asarray(temp_proj2[0, :].round(), dtype='int64')), dims=img.shape[:-1], order='F')
     synth_frontal_acc = np.zeros(ref_U.shape[:-1])
     ind_frontal = np.arange(0, ref_U.shape[0]*ref_U.shape[1])
     ind_frontal = ind_frontal[nonbadind]

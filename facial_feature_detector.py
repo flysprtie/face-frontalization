@@ -1,10 +1,7 @@
 __author__ = 'Douglas'
 
 import dlib
-import os
 import numpy as np
-
-this_path = os.path.dirname(__file__)
 
 def _shape_to_np(shape):
     xy = []
@@ -14,16 +11,17 @@ def _shape_to_np(shape):
     return xy
 
 
-def get_landmarks(img):
+def get_landmarks(img, resource_dir, verbose=False):
     # if not automatically downloaded, get it from:
     # http://sourceforge.net/projects/dclib/files/dlib/v18.10/shape_predictor_68_face_landmarks.dat.bz2
-    predictor_path = this_path + "/dlib_models/shape_predictor_68_face_landmarks.dat"
+    predictor_path = resource_dir + "/dlib_models/shape_predictor_68_face_landmarks.dat"
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(predictor_path)
 
     lmarks = []
     dets = detector(img, 1)
-    print("Number of faces detected: {}".format(len(dets)))
+    if verbose:
+        print("Number of faces detected: {}".format(len(dets)))
     shapes = []
     for k, det in enumerate(dets):
         shape = predictor(img, det)
